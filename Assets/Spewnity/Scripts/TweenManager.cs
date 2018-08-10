@@ -97,10 +97,14 @@ namespace Spewnity
         /// <param name="fastForward">Before stopping, fast forwards the playing tween to its end point</param>
         public void Stop(string tweenName, bool fastForward = false)
         {
+            List<Tween> tweensToStop = new List<Tween>();
+
             foreach (List<Tween> list in new List<Tween>[] { activeTweens, tweensToAdd })
             {
-                list.ForEach((t) => { if (t.name == tweenName) Stop(t, fastForward); });
+                list.ForEach((t) => { if (t.name == tweenName) tweensToStop.Add(t); });
             }
+
+            tweensToStop.ForEach((t) => Stop(t, fastForward));
         }
 
         /// <summary>
@@ -795,7 +799,7 @@ namespace Spewnity
             {
                 Rect colorRect = new Rect(rect.x + Helper.lastX, rect.y, width, rect.height);
                 prop.vector4Value = (Vector4) EditorGUI.ColorField(colorRect, GUIContent.none,
-                    (Color) prop.vector4Value, false, !frozenAxes.w, false, null);
+                    (Color) prop.vector4Value, false, !frozenAxes.w, false);
             }
         }
 #endif // UNITY_EDITOR
@@ -831,7 +835,7 @@ namespace Spewnity
             {
                 Rect colorRect = new Rect(rect.x + Helper.lastX, rect.y, width, rect.height);
                 prop.vector4Value = (Vector4) EditorGUI.ColorField(colorRect, GUIContent.none,
-                    (Color) prop.vector4Value, false, !frozenAxes.w, false, null);
+                    (Color) prop.vector4Value, false, !frozenAxes.w, false);
             }
         }
 

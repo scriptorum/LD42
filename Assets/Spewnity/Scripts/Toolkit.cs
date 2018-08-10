@@ -418,6 +418,26 @@ namespace Spewnity
         }
 
         /// <summary>
+        /// Adds a shallow copy of the specified component to this game object.
+        /// </summary>
+        /// <param name="go">The game object to receive the new component copy</param>
+        /// <param name="component">The component to copy</param>
+        /// <returns>The copy</returns> 
+        public static Component AddComponent(this GameObject go, Component component)
+        {
+            System.Type type = component.GetType();
+            Component copy = go.AddComponent(type);
+            PropertyInfo[] propInfo = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            foreach (PropertyInfo pi in propInfo)
+            {
+                if(!(pi.CanRead && pi.CanWrite))
+                    continue;
+                pi.SetValue(copy, pi.GetValue(component, null), null);
+            }
+            return copy;
+        }
+
+        /// <summary>
         /// Destroys all children underneath this Transform, but does
         /// not destroy the Transform's GameObject itself.
         /// </summary>

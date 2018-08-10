@@ -99,7 +99,8 @@ namespace Spewnity
             if (counter.Count == 0)
                 Debug.Log("No counters found");
 
-            else foreach(string key in counter.Keys) LogCount(key);
+            else
+                foreach (string key in counter.Keys) LogCount(key);
         }
 
         /// <summary>
@@ -133,15 +134,28 @@ namespace Spewnity
                 counter[name] = 0;
             return name;
         }
-    }
 
-    [System.Serializable]
-    public struct CallbackHelperEvents
-    {
-        public UnityEvent Awake;
-        public UnityEvent Start;
-        public UnityEvent Update;
-        public UnityEvent Validate;
+        void OnBecameInvisible()
+        {
+            callbackEvents.Validate.Invoke();
+        }
+
+        void OnBecameVisible()
+        {
+            callbackEvents.Validate.Invoke();
+
+        }
+
+        [System.Serializable]
+        public struct CallbackHelperEvents
+        {
+            public UnityEvent Awake;
+            public UnityEvent Start;
+            public UnityEvent Update;
+            public UnityEvent Validate;
+            public UnityEvent BecameInvisible;
+            public UnityEvent BecameVisible;
+        }
     }
 
     [System.Serializable]
@@ -151,7 +165,7 @@ namespace Spewnity
     }
 
 #if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof (CallbackHelperButtonEvent))]
+    [CustomPropertyDrawer(typeof(CallbackHelperButtonEvent))]
     public class CallbackHelperButtonEventPD : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
