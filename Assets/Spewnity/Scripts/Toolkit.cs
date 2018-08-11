@@ -430,7 +430,7 @@ namespace Spewnity
             PropertyInfo[] propInfo = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
             foreach (PropertyInfo pi in propInfo)
             {
-                if(!(pi.CanRead && pi.CanWrite))
+                if (!(pi.CanRead && pi.CanWrite))
                     continue;
                 pi.SetValue(copy, pi.GetValue(component, null), null);
             }
@@ -623,5 +623,13 @@ namespace Spewnity
             return enm.Current;
         }
 #endif
+    }
+
+    [System.Serializable]
+    public struct MinMaxInt
+    {
+        public int min;
+        public int max;
+        public int length { get { return max - min + 1; } }
     }
 }
